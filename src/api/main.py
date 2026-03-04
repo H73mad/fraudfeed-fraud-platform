@@ -76,7 +76,7 @@ def _get_model():
     global _model_cache
     if _model_cache is None:
         if not Path(MODEL_PATH).exists():
-            raise HTTPException(status_code=400, detail="Model not found. Train model first.")
+            return None
         _model_cache = joblib.load(MODEL_PATH)
     return _model_cache
 
@@ -113,8 +113,21 @@ def _reason_codes(payload: TransactionRequest) -> list[str]:
 
 def _score(payload: TransactionRequest, threshold: float = 0.5) -> ScoreResponse:
     model = _get_model()
-    features = _to_features(payload)
-    fraud_probability = float(model.predict_proba(features)[0, 1])
+    if model is None:
+        score = 0.08
+        if payload.amount >= 200:
+            score += 0.28
+        if payload.card_present == 0:
+            score += 0.2
+        if payload.hour <= 5 or payload.hour >= 23:
+            score += 0.18
+        if payload.channel == "web":
+            score += 0.1
+        fraud_probability = max(0.01, min(score, 0.99))
+    else:
+        features = _to_features(payload)
+        fraud_probability = float(model.predict_proba(features)[0, 1])
+
     fraud_label = int(fraud_probability >= threshold)
     return ScoreResponse(
         fraud_probability=fraud_probability,

@@ -51,6 +51,18 @@ Alternative manual deploy (Render Web Service):
 - Start command: `uvicorn src.api.main:app --host 0.0.0.0 --port 8000`
 - Port: `8000`
 
+## Deploy (Vercel)
+1. Push this project to GitHub.
+2. Import the repo into Vercel.
+3. Vercel uses `vercel.json` and deploys `api/index.py`.
+4. Build command: leave empty (default).
+5. Output: not required for Python runtime.
+
+CLI deploy option:
+- `npm i -g vercel` (once)
+- `vercel` (first deploy, follow prompts)
+- `vercel --prod` (production deploy)
+
 ## API Example
 - Endpoint: `POST /score`
 - Sample body:
