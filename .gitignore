@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Data and model outputs
+data/*.csv
+models/*.joblib
+models/*.json
+
+# IDE
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Local test files
+sample_suspicious.ps1

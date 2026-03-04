@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FraudFeed</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar card">
+      <h1 class="brand">FraudFeed</h1>
+      <p class="tag">Social-style fraud intelligence desk</p>
+      <div class="nav-chip" id="healthChip">Checking system...</div>
+      <div class="metric-mini">
+        <span>ROC AUC</span>
+        <strong id="rocAuc">-</strong>
+      </div>
+      <div class="metric-mini">
+        <span>Avg Precision</span>
+        <strong id="avgPrecision">-</strong>
+      </div>
+      <p class="hint">Every check you run is posted to the live risk feed in the center panel.</p>
+    </aside>
+
+    <main class="feed">
+      <section class="composer card">
+        <h2>Create Fraud Check</h2>
+
+        <div class="tabs">
+          <button class="tab active" data-tab="url">Website URL</button>
+          <button class="tab" data-tab="file">File Upload</button>
+          <button class="tab" data-tab="tx">Transaction</button>
+        </div>
+
+        <div class="quick-actions">
+          <button class="quick" id="quickPhishing" type="button">Quick: Phishing URL</button>
+          <button class="quick" id="quickFile" type="button">Quick: Script File</button>
+          <button class="quick" id="quickTx" type="button">Quick: Night Web Payment</button>
+        </div>
+
+        <form id="urlForm" class="form tab-pane active" data-pane="url">
+          <p class="form-desc">Main check module. Use this to screen suspicious websites for phishing-style indicators before users click.</p>
+          <ol class="instructions">
+            <li>Paste the full URL including protocol (`https://` or `http://`).</li>
+            <li>Run check to score URL structure and risk signals.</li>
+            <li>Review reasons in feed and decide block / monitor policy.</li>
+          </ol>
+          <label>Website URL<input type="url" id="urlInput" placeholder="https://example.com/login" required /></label>
+          <button type="submit" class="cta">Post URL Check</button>
+        </form>
+
+        <form id="fileForm" class="form tab-pane" data-pane="file">
+          <p class="form-desc">Secondary module. Upload files to triage potentially malicious content before sharing internally.</p>
+          <ol class="instructions">
+            <li>Select one file to upload for heuristic analysis.</li>
+            <li>Run check to inspect extension, entropy, and script markers.</li>
+            <li>Use feed output to escalate high-risk files quickly.</li>
+          </ol>
+          <label>Upload file for risk analysis<input type="file" id="fileInput" required /></label>
+          <button type="submit" class="cta">Post File Check</button>
+        </form>
+
+        <form id="transactionForm" class="form tab-pane" data-pane="tx">
+          <p class="form-desc">Third module. Test payment events for transactional fraud behavior patterns.</p>
+          <ol class="instructions">
+            <li>Enter transaction amount, channel, card presence, and hour.</li>
+            <li>Run check to apply model-based probability scoring.</li>
+            <li>Use risk level and reason codes for analyst triage actions.</li>
+          </ol>
+          <div class="grid2">
+            <label>Amount<input type="number" id="amount" step="0.01" min="0.01" value="245.5" required /></label>
+            <label>Channel
+              <select id="channel">
+                <option value="web">web</option>
+                <option value="mobile">mobile</option>
+                <option value="pos">pos</option>
+              </select>
+            </label>
+            <label>Card Present
+              <select id="cardPresent">
+                <option value="0">0 (No)</option>
+                <option value="1">1 (Yes)</option>
+              </select>
+            </label>
+            <label>Hour<input type="number" id="hour" min="0" max="23" value="2" required /></label>
+          </div>
+          <button type="submit" class="cta">Post Transaction Check</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>Live Risk Feed</h2>
+        <div id="feedList" class="feed-list"></div>
+      </section>
+    </main>
+
+    <aside class="rightbar card">
+      <h2>Operations Snapshot</h2>
+      <div class="kpi-row">
+        <div class="kpi"><span>Total Checks</span><strong id="totalChecks">0</strong></div>
+        <div class="kpi"><span>High Risk</span><strong id="highChecks">0</strong></div>
+      </div>
+      <div class="kpi-row">
+        <div class="kpi"><span>Medium Risk</span><strong id="mediumChecks">0</strong></div>
+        <div class="kpi"><span>Low Risk</span><strong id="lowChecks">0</strong></div>
+      </div>
+      <p class="hint">This UI is for educational fraud triage and not a replacement for production threat intel tooling.</p>
+    </aside>
+  </div>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
