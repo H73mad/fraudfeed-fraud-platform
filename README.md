@@ -24,7 +24,7 @@ End-to-end data project demonstrating:
 1. Create a virtual environment and install dependencies:
    - `python -m venv .venv`
    - `.venv\Scripts\activate`
-   - `pip install -r requirements.txt`
+   - `pip install -r requirements-ml.txt`
 2. Start PostgreSQL:
    - `docker compose up -d`
 3. Generate synthetic transactions:
@@ -57,6 +57,10 @@ Alternative manual deploy (Render Web Service):
 3. Vercel uses `vercel.json` and deploys `api/index.py`.
 4. Build command: leave empty (default).
 5. Output: not required for Python runtime.
+
+Dependency note:
+- `requirements.txt` is lightweight runtime dependencies (used by Vercel).
+- `requirements-ml.txt` includes full data science stack for local model training.
 
 CLI deploy option:
 - `npm i -g vercel` (once)

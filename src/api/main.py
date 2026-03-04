@@ -3,11 +3,9 @@ import math
 import re
 from ipaddress import ip_address
 from pathlib import Path
-from typing import Literal
+from typing import Any, Literal
 from urllib.parse import urlparse
 
-import joblib
-import pandas as pd
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.responses import FileResponse
 from pydantic import BaseModel, Field
@@ -58,7 +56,9 @@ class CheckResponse(BaseModel):
     reasons: list[str]
 
 
-def _to_features(payload: TransactionRequest) -> pd.DataFrame:
+def _to_features(payload: TransactionRequest) -> Any:
+    import pandas as pd
+
     base = {
         "amount": float(payload.amount),
         "card_present": float(payload.card_present),
@@ -77,6 +77,8 @@ def _get_model():
     if _model_cache is None:
         if not Path(MODEL_PATH).exists():
             return None
+        import joblib
+
         _model_cache = joblib.load(MODEL_PATH)
     return _model_cache
 
